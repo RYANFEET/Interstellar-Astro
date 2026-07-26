@@ -31,10 +31,10 @@ async function Start() {
 
     if (FirstRun) {
       console.log("Restarting Server...");
-      const disable = spawn("pnpm", ["disable"], { stdio: "inherit" });
+      const disable = spawn("bun", ["run", "disable"], { stdio: "inherit" });
       disable.on("close", (code) => {
         if (code === 0) {
-          const start = spawn("pnpm", ["start"], { stdio: "inherit" });
+          const start = spawn("bun", ["run", "start"], { stdio: "inherit" });
           start.on("close", () => process.exit(0));
         } else {
           process.exit(code ?? 1);
