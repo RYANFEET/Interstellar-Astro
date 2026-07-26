@@ -51,7 +51,11 @@ async function Start() {
   const port = INConfig.server?.port || 8080;
 
   const app = Fastify({
-    serverFactory: (handler) => createServer(handler).on("upgrade", (req, socket: Socket, head) => (req.url?.startsWith("/f") ? wisp.routeRequest(req, socket, head) : socket.destroy())),
+    serverFactory: (handler) =>
+      createServer(handler).on("upgrade", (req, socket: Socket, head) => {
+        if (!req.url?.startsWith("/f")) return socket.destroy();
+        return wisp.routeRequest(req, socket, head);
+      }),
   });
 
   if (INConfig.server?.compress !== false) {
@@ -303,7 +307,12 @@ self.addEventListener("fetch", (event) => {
 
   app.addHook("onSend", (_request, reply, _payload, done) => {
     reply.header("X-Content-Type-Options", "nosniff");
-    reply.header("X-Frame-Options", "SAMEORIGIN");
+    const frameAncestors = process.env.FRAME_ANCESTORS?.trim();
+    if (frameAncestors) {
+      reply.header("Content-Security-Policy", `frame-ancestors ${frameAncestors};`);
+    } else {
+      reply.header("X-Frame-Options", "SAMEORIGIN");
+    }
     reply.header("Referrer-Policy", "strict-origin-when-cross-origin");
     reply.header("Permissions-Policy", "geolocation=(self), microphone=(self), camera=(self)");
     reply.header("X-XSS-Protection", "1; mode=block");

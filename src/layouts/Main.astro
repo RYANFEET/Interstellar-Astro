@@ -2,6 +2,7 @@
 import AppWindow from "lucide-astro/AppWindow";
 import Gamepad2 from "lucide-astro/Gamepad2";
 import LayoutGrid from "lucide-astro/LayoutGrid";
+import Link2 from "lucide-astro/Link2";
 import Menu from "lucide-astro/Menu";
 import Settings2 from "lucide-astro/Settings2";
 import X from "lucide-astro/X";
@@ -9,6 +10,7 @@ import X from "lucide-astro/X";
 import Layout from "@/layouts/Layout.astro";
 
 const navLinks = [
+  { href: "/hub", text: "Hub", Icon: Link2 },
   { href: "/games", text: "Games", Icon: Gamepad2 },
   { href: "/apps", text: "Apps", Icon: LayoutGrid },
   { href: "/tabs", text: "Tabs", Icon: AppWindow },
@@ -25,7 +27,7 @@ const navLinks = [
       href="/"
       class="text-3xl font-bold text-text hover:text-accent transition-colors tracking-tighter"
     >
-      IN
+      YN
     </a>
 
     <div id="nav-links" class="hidden items-center gap-2">
